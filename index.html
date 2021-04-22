@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Football cards</title>
+    <link rel="stylesheet" href="./style.css"/>
+    <script>
+        const cards = 450
+        let rounds = 0
+        let lastCount = 0
+
+        setTimeout(() => {
+            for (let i = 0; i < cards; i ++) {
+                let card = document.createElement('div')
+                card.classList.add('card')
+                card.setAttribute('id', 'card-' + i)
+                card.innerText = "" + (i + 1)
+
+                document.getElementById('card-container').appendChild(card)
+            }
+        }, 0)
+
+        function buy(amount = 5) {
+            if (haveAll()) {
+                return
+            }
+            for (let i = 0; i < amount; i++) {
+                let selected = Math.round(Math.random() * cards)
+                let card = document.getElementById('card-' + selected).classList
+
+                card.add('card-selected', 'card-taken')
+                setTimeout(() => card.remove('card-selected'), 500)
+            }
+            rounds++
+            document.getElementById('cost').innerText = '' + rounds
+            document.getElementById('count').innerText = '' + cardCount()
+            document.getElementById('doubles').innerText = '' + (rounds * 5 - cardCount())
+            document.getElementById('new').innerText = '' + (cardCount() - lastCount)
+            lastCount = cardCount()
+        }
+
+        function haveAll() {
+            return cardCount() === cards
+        }
+
+        function cardCount() {
+            return document.querySelectorAll('.card-taken').length
+        }
+    </script>
+</head>
+<body>
+<header>
+    <div class="price">
+        € <span id="cost">0</span> for
+        <span id="count">0</span> cards
+        (<span id="doubles">0</span> doubles, <span id="new">0</span> new in last pack)
+    </div>
+    <button onclick="buy()">Buy 5 cards</button>
+</header>
+<div id="card-container"></div>
+</body>
+</html>
